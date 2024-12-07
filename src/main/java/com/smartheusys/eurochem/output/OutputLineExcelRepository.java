@@ -31,31 +31,36 @@ public class OutputLineExcelRepository implements OutputLineRepository {
     @Override
     public void saveOutputLines(List<OutputLine> outputLines) {
         createWorksheetIfNotExists(outputLines);
+        logger.debug("Adding all output lines to sheet...");
         outputLines.forEach(this::addLineToSheet);
         autoformatWorkbook();
-        System.out.println("Added all to sheet. Now writing...");
         saveWorksheetToFile();
-        System.out.println("Finished writing to file.");
+        logger.debug("Finished writing to file.");
     }
 
     private void autoformatWorkbook() {
+        logger.debug("Autoformatting workbook...");
         Sheet sheet = workbook.getSheet(OUTPUT_SHEET_NAME);
         for (int i = 0; i < uniqueCombinations.size() + 1; i++) {
+            logger.trace("Autoformatting column {}", i);
             sheet.autoSizeColumn(i);
         }
     }
 
     private void saveWorksheetToFile() {
+        logger.debug("Saving worksheet to file.");
         try {
             FileOutputStream fileOut = new FileOutputStream(fileService.getOutputFile());
             workbook.write(fileOut);
             fileOut.close();
         } catch (Exception exception) {
-            exception.printStackTrace();
+            logger.error("Error while saving output file: {}", exception.getMessage());
+            logger.error("Trace: ", exception);
         }
     }
 
     private void addLineToSheet(OutputLine outputLine) {
+        logger.trace("Adding line to sheet: {}", outputLine);
         Row newRow = workbook.getSheet(OUTPUT_SHEET_NAME).createRow(rowIndex);
 
         Cell fProductCell = newRow.createCell(0);
@@ -76,11 +81,12 @@ public class OutputLineExcelRepository implements OutputLineRepository {
     }
 
     private void createWorksheetIfNotExists(List<OutputLine> outputLines) {
-
-
+        logger.debug("Creating worksheet if not exists...");
         if (workbook != null) {
+            logger.debug("Worksheet already exists.");
             return;
         }
+        logger.debug("Creating new worksheet...");
 
         workbook = new HSSFWorkbook();
         Sheet sheet = workbook.createSheet(OUTPUT_SHEET_NAME);
@@ -106,10 +112,12 @@ public class OutputLineExcelRepository implements OutputLineRepository {
                         .thenComparing(ColumnCombination::getColumnUnit))// Sorting by name, then unit
                 .collect(Collectors.toList());
 
+        logger.trace("Creating header cell for F_PRODUCT id column...");
         Cell fProductCell = headerRow.createCell(0);
         fProductCell.setCellValue("F_PRODUCT");
         fProductCell.setCellStyle(headerCellStyle);
 
+        logger.trace("Creating header row for unique combinations...");
         int index = 1;
         for (ColumnCombination uniqueCombination : uniqueCombinations) {
             Cell cell = headerRow.createCell(index);
@@ -120,7 +128,9 @@ public class OutputLineExcelRepository implements OutputLineRepository {
 
             index++;
         }
+        logger.trace("Created header row with {} columns.", uniqueCombinations.size());
 
+        logger.trace("Creating unit row for unique combinations...");
         Row unitRow = sheet.createRow(1);
         index = 1;
         for (ColumnCombination uniqueCombination : uniqueCombinations) {
@@ -129,6 +139,7 @@ public class OutputLineExcelRepository implements OutputLineRepository {
             cell.setCellStyle(unitCellStyle);
             index++;
         }
+        logger.trace("Created unit row with {} columns.", uniqueCombinations.size());
     }
 
     @Data

@@ -6,10 +6,12 @@ import com.smartheusys.eurochem.excel.InputExcelService;
 import com.smartheusys.eurochem.input.InputLineService;
 import com.smartheusys.eurochem.output.OutputLine;
 import com.smartheusys.eurochem.output.OutputLineService;
+import com.smartheusys.eurochem.ui.PDCUI;
 import lombok.RequiredArgsConstructor;
 import org.apache.logging.log4j.Logger;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 
+import javax.swing.*;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
@@ -28,26 +30,28 @@ public class ProductDataConverter {
     private final InputExcelService inputExcelService;
     private final ConversionService conversionService;
 
-
     public void startApplication(String[] args) {
         logger.info("Starting application...");
-        logger.info("Arguments: {}", Arrays.toString(args));
 
-        if (args.length != 1) {
-            logger.fatal("You must provide an input file");
-            logger.fatal("Usage: java -jar ProductDataConverter.jar <inputfile>.xlsx");
-            logger.fatal("Exiting application.");
-            return;
+        logger.debug("Setting UI system like look and feel.");
+        try {
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+        } catch (Exception e) {
+            logger.warn("Error while setting UI system look and feel: {}", e.getMessage());
+            logger.warn("Trace: ", e);
         }
+        logger.info("Starting UI.");
+        PDCUI ui = new PDCUI(this, logger);
+        logger.info("UI started.");
+    }
 
-        String inputFile = args[0];
-        String outputFile = "output.xls";
-
+    public void startProcessing(String inputFilePath, String outputFile) {
         logger.info("Preparing files...");
-        logger.debug("Input file: {}", inputFile);
-        fileService.setInputFile(inputFile);
-        fileService.setOutputFile(outputFile);
+        logger.info("Input file: {}", inputFilePath);
+        logger.info("Output file: {}", outputFile);
+        fileService.setInputFile(inputFilePath);
 
+        fileService.setOutputFile(outputFile);
         fileService.deleteFileIfExists(outputFile);
 
         try {

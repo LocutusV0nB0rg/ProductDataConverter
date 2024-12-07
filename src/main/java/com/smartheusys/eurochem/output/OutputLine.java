@@ -3,9 +3,7 @@ package com.smartheusys.eurochem.output;
 import lombok.Data;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * As we don't know if the composition of the fertilisers will ever change, we want to be flexible.

@@ -38,6 +38,15 @@ public class ConversionService {
                     continue;
                 }
 
+                boolean containsValuePoint = entriesOfOneDataPoint.stream().anyMatch(entry -> entry.getDataCodeText().contains("value") || entry.getDataCodeText().contains("Value"));
+                boolean containsUnitPoint = entriesOfOneDataPoint.stream().anyMatch(entry -> entry.getDataCodeText().contains("unit") || entry.getDataCodeText().contains("Unit"));
+
+                if (!containsValuePoint || !containsUnitPoint) {
+                    logger.trace("Expected at least one entry with 'value' and 'unit' for product {} and rep sequence {}, but got {} and {}", outputLine.getFProduct(), fRepSequenceToEntriesEntry.getKey(), containsValuePoint, containsUnitPoint);
+                    logger.trace("Not processing this data point. Ommited F_REP_SEQUENCE: {}", fRepSequenceToEntriesEntry.getKey());
+                    continue;
+                }
+
                 String outputColumnName = null, outputColumnUnit = null, outputValue = null;
 
                 for (InputLine entry : entriesOfOneDataPoint) {
