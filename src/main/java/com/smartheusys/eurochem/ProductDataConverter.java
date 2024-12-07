@@ -13,9 +13,7 @@ import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 
 import javax.swing.*;
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 
 @Singleton
 @RequiredArgsConstructor(onConstructor__ = @Inject)
@@ -65,6 +63,6 @@ public class ProductDataConverter {
         List<OutputLine> outputLineList = conversionService.convertInputLinesToOutputLines(inputLineService.getInputLines());
         outputLineService.saveOutputLines(outputLineList);
 
-        logger.info("Application finished.");
+        logger.info("Conversion run finished.");
     }
 }

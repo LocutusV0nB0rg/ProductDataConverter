@@ -8,8 +8,30 @@
             </PatternLayout>
         </Console>
 
-        <!-- Rolling File Appender -->
-        <RollingFile name="FileAppender" fileName="logs/PDC.log" filePattern="logs/PDC-%d{yyyy-MM-dd}-%i.log">
+        <!-- File Appender for TRACE -->
+        <RollingFile name="TraceFileAppender" fileName="logs/PDC-TRACE.log" filePattern="logs/PDC-TRACE-%d{yyyy-MM-dd}-%i.log">
+            <PatternLayout>
+                <Pattern>%d{yyyy-MM-dd HH:mm:ss} [%t] %-5level %logger{36} - %msg%n</Pattern>
+            </PatternLayout>
+            <Policies>
+                <SizeBasedTriggeringPolicy size="5MB"/>
+            </Policies>
+            <DefaultRolloverStrategy max="5"/>
+        </RollingFile>
+
+        <!-- File Appender for DEBUG -->
+        <RollingFile name="DebugFileAppender" fileName="logs/PDC-DEBUG.log" filePattern="logs/PDC-DEBUG-%d{yyyy-MM-dd}-%i.log">
+            <PatternLayout>
+                <Pattern>%d{yyyy-MM-dd HH:mm:ss} [%t] %-5level %logger{36} - %msg%n</Pattern>
+            </PatternLayout>
+            <Policies>
+                <SizeBasedTriggeringPolicy size="5MB"/>
+            </Policies>
+            <DefaultRolloverStrategy max="5"/>
+        </RollingFile>
+
+        <!-- File Appender for INFO -->
+        <RollingFile name="InfoFileAppender" fileName="logs/PDC-INFO.log" filePattern="logs/PDC-INFO-%d{yyyy-MM-dd}-%i.log">
             <PatternLayout>
                 <Pattern>%d{yyyy-MM-dd HH:mm:ss} [%t] %-5level %logger{36} - %msg%n</Pattern>
             </PatternLayout>
@@ -21,15 +43,17 @@
     </Appenders>
 
     <Loggers>
-        <!-- Logger for PDC -->
+        <!-- PDC Logger -->
         <Logger name="PDC" level="trace" additivity="false">
-            <AppenderRef ref="FileAppender"/>
+            <AppenderRef ref="TraceFileAppender" level="trace"/>
+            <AppenderRef ref="DebugFileAppender" level="debug"/>
+            <AppenderRef ref="InfoFileAppender" level="info"/>
             <AppenderRef ref="ConsoleAppender"/>
         </Logger>
 
         <!-- Root Logger -->
         <Root level="info">
-            <AppenderRef ref="FileAppender"/>
+            <AppenderRef ref="InfoFileAppender"/>
             <AppenderRef ref="ConsoleAppender"/>
         </Root>
     </Loggers>
