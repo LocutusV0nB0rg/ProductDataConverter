@@ -55,6 +55,8 @@ public class ProductDataConverter {
         try {
             inputExcelService.initiateExcelService();
         } catch (IOException | InvalidFormatException e) {
+            JOptionPane.showMessageDialog(new JFrame(), "Error while initiating Excel Service: " + e.getMessage(), "Fatal error.",
+                    JOptionPane.ERROR_MESSAGE);
             logger.fatal("Error while initiating Excel service: {}", e.getMessage());
             logger.fatal("Exiting application.");
             return;

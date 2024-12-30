@@ -9,7 +9,7 @@
         </Console>
 
         <!-- File Appender for TRACE -->
-        <RollingFile name="TraceFileAppender" fileName="logs/PDC-TRACE.log" filePattern="logs/PDC-TRACE-%d{yyyy-MM-dd}-%i.log">
+        <RollingFile name="TraceFileAppender" fileName="logs/PDC.TRACE.log" filePattern="logs/PDC-TRACE-%d{yyyy-MM-dd}-%i.log">
             <PatternLayout>
                 <Pattern>%d{yyyy-MM-dd HH:mm:ss} [%t] %-5level %logger{36} - %msg%n</Pattern>
             </PatternLayout>
@@ -20,7 +20,7 @@
         </RollingFile>
 
         <!-- File Appender for DEBUG -->
-        <RollingFile name="DebugFileAppender" fileName="logs/PDC-DEBUG.log" filePattern="logs/PDC-DEBUG-%d{yyyy-MM-dd}-%i.log">
+        <RollingFile name="DebugFileAppender" fileName="logs/PDC.DEBUG.log" filePattern="logs/PDC-DEBUG-%d{yyyy-MM-dd}-%i.log">
             <PatternLayout>
                 <Pattern>%d{yyyy-MM-dd HH:mm:ss} [%t] %-5level %logger{36} - %msg%n</Pattern>
             </PatternLayout>
@@ -31,7 +31,7 @@
         </RollingFile>
 
         <!-- File Appender for INFO -->
-        <RollingFile name="InfoFileAppender" fileName="logs/PDC-INFO.log" filePattern="logs/PDC-INFO-%d{yyyy-MM-dd}-%i.log">
+        <RollingFile name="InfoFileAppender" fileName="logs/PDC.INFO.log" filePattern="logs/PDC-INFO-%d{yyyy-MM-dd}-%i.log">
             <PatternLayout>
                 <Pattern>%d{yyyy-MM-dd HH:mm:ss} [%t] %-5level %logger{36} - %msg%n</Pattern>
             </PatternLayout>
